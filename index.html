@@ -1,57 +1,1626 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mon Organisation - Site Vitrine</title>
+    <title>Smofi-Tech | Développement & Innovation Informatique</title>
+    <meta name="description" content="Smofi-Tech est une entreprise de programmation logicielle, développement web et mobile, conseil digital et formation. Fondée en 2018 à Paris par Mohamed El Hafi.">
+    
+    <!-- Google Fonts: Outfit (Titres) et Inter (Texte) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
 
     <style>
-        body {
-            font-family: Arial, sans-serif;
+        /* --- DESIGN SYSTEM & SYSTEM VARIABLES --- */
+        :root {
+            --bg-deep: #070b13;
+            --bg-dark: #0c111e;
+            --bg-card: #121a2d;
+            --bg-card-hover: #18223b;
+            
+            --primary: #06b6d4; /* Neon Cyan */
+            --primary-glow: rgba(6, 182, 212, 0.4);
+            --primary-dark: #0891b2;
+            
+            --secondary: #3b82f6; /* Electric Blue */
+            --secondary-glow: rgba(59, 130, 246, 0.3);
+            
+            --text-light: #ffffff;
+            --text-muted: #9ca3af;
+            --text-dark: #4b5563;
+            
+            --border-color: rgba(255, 255, 255, 0.08);
+            --border-hover: rgba(6, 182, 212, 0.3);
+            
+            --font-title: 'Outfit', sans-serif;
+            --font-body: 'Inter', sans-serif;
+            
+            --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* --- BASIC RESET & GENERAL STYLES --- */
+        * {
             margin: 0;
             padding: 0;
-            color: #333;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-deep);
+            color: var(--text-light);
+            font-family: var(--font-body);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: var(--font-title);
+            font-weight: 600;
+            letter-spacing: -0.02em;
+        }
+
+        /* --- BACKGROUND CANVAS ANIMATION --- */
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            pointer-events: none;
+            opacity: 0.6;
+        }
+
+        /* --- SHINE / GLOW HELPER STYLES --- */
+        .neon-glow {
+            box-shadow: 0 0 25px var(--primary-glow);
+        }
+        .neon-border {
+            border: 1px solid var(--border-color);
+            transition: var(--transition-smooth);
+        }
+        .neon-border:hover {
+            border-color: var(--primary);
+            box-shadow: 0 0 15px rgba(6, 182, 212, 0.25);
+        }
+
+        /* --- GLASSMORPHISM COMPONENT --- */
+        .glass {
+            background: rgba(12, 17, 30, 0.75);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--border-color);
+        }
+
+        /* --- HEADER & NAVIGATION --- */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 100;
+            transition: var(--transition-smooth);
+        }
+        header.scrolled {
+            background: rgba(7, 11, 19, 0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 10px 0;
+        }
+        header:not(.scrolled) {
+            padding: 20px 0;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 24px;
+        }
+
+        .brand-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            font-family: var(--font-title);
+            font-weight: 700;
+            font-size: 24px;
+            color: var(--text-light);
+        }
+        .brand-logo svg {
+            color: var(--primary);
+            filter: drop-shadow(0 0 5px var(--primary-glow));
+        }
+        .brand-logo span.highlight {
+            color: var(--primary);
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 32px;
+            align-items: center;
+            list-style: none;
+        }
+        .nav-link {
+            text-decoration: none;
+            color: var(--text-muted);
+            font-weight: 500;
+            font-size: 15px;
+            transition: var(--transition-smooth);
+            position: relative;
+            padding: 6px 0;
+        }
+        .nav-link:hover, .nav-link.active {
+            color: var(--text-light);
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transition: var(--transition-smooth);
+        }
+        .nav-link:hover::after, .nav-link.active::after {
+            width: 100%;
+        }
+
+        .cta-btn {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: #000000;
+            font-family: var(--font-title);
+            font-weight: 600;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            transition: var(--transition-smooth);
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(6, 182, 212, 0.2);
+        }
+        .cta-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(6, 182, 212, 0.4), 0 0 10px var(--primary-glow);
+            color: #000000;
+        }
+        .cta-btn-outline {
+            background: transparent;
+            color: var(--text-light);
+            border: 1px solid var(--primary);
+            font-family: var(--font-title);
+            font-weight: 600;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            transition: var(--transition-smooth);
+            cursor: pointer;
+        }
+        .cta-btn-outline:hover {
+            background: rgba(6, 182, 212, 0.1);
+            box-shadow: 0 0 15px rgba(6, 182, 212, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* Menu Burger Mobile */
+        .burger-menu {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--text-light);
+        }
+
+        /* --- HERO SECTION --- */
+        .hero-section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 140px 24px 80px 24px;
+            position: relative;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 48px;
+            align-items: center;
+            width: 100%;
+        }
+
+        .hero-content {
+            z-index: 10;
+        }
+
+        .badge {
+            background: rgba(6, 182, 212, 0.1);
+            border: 1px solid rgba(6, 182, 212, 0.2);
+            color: var(--primary);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 24px;
+            text-transform: uppercase;
+        }
+        .badge .dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--primary);
+            border-radius: 50%;
+            display: inline-block;
+            box-shadow: 0 0 8px var(--primary);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(6, 182, 212, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(6, 182, 212, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(6, 182, 212, 0); }
+        }
+
+        .hero-title {
+            font-size: 56px;
+            line-height: 1.1;
+            margin-bottom: 24px;
+            font-weight: 800;
+        }
+        .hero-title span.gradient {
+            background: linear-gradient(135deg, var(--text-light) 30%, var(--primary) 70%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-description {
+            font-size: 18px;
+            color: var(--text-muted);
+            margin-bottom: 40px;
+            max-width: 580px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        /* Perspective 3D Image Showcase */
+        .hero-visual {
+            display: flex;
+            justify-content: center;
+            perspective: 1200px;
+            z-index: 5;
+        }
+        .visual-frame {
+            position: relative;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 30px rgba(6, 182, 212, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transform: rotateY(-12deg) rotateX(6deg) rotateZ(-1deg);
+            transition: all 0.5s ease;
+            max-width: 100%;
+        }
+        .visual-frame:hover {
+            transform: rotateY(-4deg) rotateX(2deg) rotateZ(0deg) scale(1.03);
+            box-shadow: 0 30px 60px -10px rgba(0, 0, 0, 0.6), 0 0 40px rgba(6, 182, 212, 0.3);
+            border-color: rgba(6, 182, 212, 0.4);
+        }
+        .visual-frame img {
+            width: 100%;
+            height: auto;
+            display: block;
+            object-fit: cover;
+        }
+        .visual-frame::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(6, 182, 212, 0.1) 0%, transparent 50%, rgba(59, 130, 246, 0.1) 100%);
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        /* --- MAIN SECTIONS GENERAL STYLING --- */
+        section.section-pad {
+            padding: 100px 24px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 64px;
+        }
+        .section-tag {
+            color: var(--primary);
+            text-transform: uppercase;
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            margin-bottom: 12px;
+            display: block;
+        }
+        .section-title {
+            font-size: 38px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+        .section-subtitle {
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto;
+            font-size: 16px;
+        }
+
+        /* --- SERVICES SECTION --- */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+        }
+
+        .service-card {
+            background-color: var(--bg-card);
+            border-radius: 16px;
+            padding: 40px;
+            border: 1px solid var(--border-color);
+            transition: var(--transition-smooth);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .service-card:hover {
+            transform: translateY(-8px);
+            background-color: var(--bg-card-hover);
+            border-color: var(--primary);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4), 0 0 20px rgba(6, 182, 212, 0.1);
+        }
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 0;
+            background: linear-gradient(to bottom, var(--primary), var(--secondary));
+            transition: var(--transition-smooth);
+        }
+        .service-card:hover::before {
+            height: 100%;
+        }
+
+        .icon-box {
+            width: 56px;
+            height: 56px;
+            border-radius: 12px;
+            background: rgba(6, 182, 212, 0.08);
+            border: 1px solid rgba(6, 182, 212, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            transition: var(--transition-smooth);
+        }
+        .service-card:hover .icon-box {
+            background: var(--primary);
+            color: #000000;
+            transform: scale(1.1);
+            box-shadow: 0 0 15px var(--primary-glow);
+        }
+
+        .service-title {
+            font-size: 22px;
+            font-weight: 600;
+        }
+        .service-desc {
+            color: var(--text-muted);
+            font-size: 15px;
+            flex-grow: 1;
+        }
+        .service-tech-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+        .tech-tag {
+            font-size: 12px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: var(--text-muted);
+            padding: 4px 10px;
+            border-radius: 6px;
+            transition: var(--transition-smooth);
+        }
+        .service-card:hover .tech-tag {
+            border-color: rgba(6, 182, 212, 0.2);
+            color: var(--text-light);
+        }
+
+        /* --- ABOUT SECTION --- */
+        .about-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .about-text h3 {
+            font-size: 28px;
+            margin-bottom: 20px;
+            color: var(--text-light);
+        }
+        .about-text p {
+            color: var(--text-muted);
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+        .about-text pstrong {
+            color: var(--text-light);
+            font-weight: 500;
+        }
+
+        .kbis-reference {
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(6, 182, 212, 0.04);
+            border-left: 3px solid var(--primary);
+            border-radius: 0 12px 12px 0;
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+        .kbis-reference strong {
+            color: var(--text-light);
+        }
+
+        /* Metrics grid */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+        }
+        .metric-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 30px;
+            border-radius: 16px;
+            text-align: center;
+            transition: var(--transition-smooth);
+        }
+        .metric-card:hover {
+            border-color: var(--secondary);
+            transform: scale(1.02);
+        }
+        .metric-value {
+            font-size: 40px;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 8px;
+            font-family: var(--font-title);
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .metric-label {
+            font-size: 14px;
+            color: var(--text-muted);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* --- WHY US SECTION --- */
+        .why-us-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+        .why-us-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 30px;
+            border-radius: 16px;
+            transition: var(--transition-smooth);
             text-align: center;
         }
-        header {
-            background-color: #0056b3;
-            color: white;
-            padding: 60px 20px;
+        .why-us-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-5px);
         }
-        h1 { margin: 0; font-size: 2.5em; }
-        .container {
-            max-width: 800px;
-            margin: 40px auto;
-            padding: 0 20px;
+        .why-us-card .icon-wrap {
+            margin: 0 auto 20px auto;
+            width: 48px;
+            height: 48px;
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--secondary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition-smooth);
         }
-        .cta-button {
-            display: inline-block;
-            background-color: #ff5722;
-            color: white;
-            padding: 12px 24px;
+        .why-us-card:hover .icon-wrap {
+            background: var(--secondary);
+            color: #ffffff;
+            box-shadow: 0 0 15px var(--secondary-glow);
+        }
+        .why-us-card h3 {
+            font-size: 18px;
+            margin-bottom: 12px;
+        }
+        .why-us-card p {
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        /* --- CONTACT SECTION --- */
+        .contact-layout {
+            display: grid;
+            grid-template-columns: 0.8fr 1.2fr;
+            gap: 50px;
+            align-items: start;
+        }
+
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .info-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 30px;
+        }
+        .info-card h3 {
+            font-size: 20px;
+            margin-bottom: 24px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 12px;
+        }
+        .info-item {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 20px;
+            align-items: flex-start;
+        }
+        .info-item:last-child {
+            margin-bottom: 0;
+        }
+        .info-icon {
+            color: var(--primary);
+            flex-shrink: 0;
+            margin-top: 3px;
+        }
+        .info-text h4 {
+            font-size: 14px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 4px;
+        }
+        .info-text p, .info-text a {
+            color: var(--text-light);
+            font-size: 15px;
             text-decoration: none;
-            border-radius: 5px;
-            margin-top: 20px;
-            font-weight: bold;
+        }
+        .info-text a:hover {
+            color: var(--primary);
+        }
+
+        .contact-form-container {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 40px;
+            position: relative;
+        }
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .form-label {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-muted);
+        }
+        .form-input {
+            background: rgba(7, 11, 19, 0.6);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 12px 16px;
+            color: var(--text-light);
+            font-family: var(--font-body);
+            font-size: 15px;
+            transition: var(--transition-smooth);
+            width: 100%;
+        }
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 10px rgba(6, 182, 212, 0.2);
+            background: rgba(7, 11, 19, 0.9);
+        }
+        textarea.form-input {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        /* Form success message spinner */
+        .btn-loading-content {
+            display: none;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .spinner {
+            border: 2px solid rgba(0,0,0, 0.1);
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            border-left-color: #000;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* --- TOAST NOTIFICATION --- */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--bg-card);
+            border-left: 4px solid var(--primary);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5), 0 0 15px rgba(6,182,212,0.1);
+            border-top: 1px solid var(--border-color);
+            border-right: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+            border-radius: 0 8px 8px 0;
+            padding: 16px 24px;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transform: translateY(150%);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .toast.show {
+            transform: translateY(0);
+        }
+        .toast-icon {
+            color: var(--primary);
+        }
+        .toast-message {
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        /* --- MODAL (MENTIONS LEGALES) --- */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(7, 11, 19, 0.8);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            padding: 24px;
+        }
+        .modal.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .modal-content {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            max-width: 650px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+            padding: 40px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+            transform: scale(0.9);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .modal.open .modal-content {
+            transform: scale(1);
+        }
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: var(--transition-smooth);
+        }
+        .modal-close:hover {
+            color: var(--text-light);
+        }
+        .modal-title {
+            font-size: 24px;
+            margin-bottom: 24px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 12px;
+        }
+        .modal-body {
+            color: var(--text-muted);
+            font-size: 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .modal-section-title {
+            color: var(--text-light);
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            background-color: #05080e;
+            border-top: 1px solid var(--border-color);
+            padding: 48px 24px;
+            text-align: center;
+        }
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 24px;
+        }
+        .footer-logo {
+            font-size: 20px;
+        }
+        .footer-links {
+            display: flex;
+            gap: 24px;
+            list-style: none;
+        }
+        .footer-link {
+            text-decoration: none;
+            color: var(--text-muted);
+            font-size: 14px;
+            transition: var(--transition-smooth);
+        }
+        .footer-link:hover {
+            color: var(--primary);
+        }
+        .copyright {
+            font-size: 13px;
+            color: var(--text-dark);
+            margin-top: 16px;
+        }
+
+        /* --- SCROLL ANIMATION CLASSES --- */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- RESPONSIVE MEDIA QUERIES --- */
+        @media (max-width: 992px) {
+            .hero-grid {
+                grid-template-columns: 1fr;
+                gap: 40px;
+                text-align: center;
+            }
+            .hero-description {
+                margin-left: auto;
+                margin-right: auto;
+            }
+            .hero-buttons {
+                justify-content: center;
+            }
+            .hero-visual {
+                order: -1;
+                max-width: 500px;
+                margin: 0 auto;
+            }
+            .visual-frame {
+                transform: rotateY(0deg) rotateX(0deg);
+            }
+            .about-layout {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+            .contact-layout {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 40px;
+            }
+            .section-title {
+                font-size: 30px;
+            }
+            .nav-menu {
+                position: fixed;
+                top: 80px;
+                left: -100%;
+                width: 100%;
+                height: calc(100vh - 80px);
+                background-color: var(--bg-deep);
+                flex-direction: column;
+                padding: 48px 24px;
+                gap: 32px;
+                transition: 0.4s ease;
+                border-top: 1px solid var(--border-color);
+            }
+            .nav-menu.open {
+                left: 0;
+            }
+            .burger-menu {
+                display: block;
+            }
+            .why-us-grid {
+                grid-template-columns: 1fr;
+            }
+            .metric-card {
+                padding: 20px;
+            }
+            .metric-value {
+                font-size: 32px;
+            }
+            .cta-header-btn {
+                display: none;
+            }
         }
     </style>
 </head>
 <body>
 
-    <header>
-        <h1>Bienvenue sur le site de notre Organisation</h1>
-        <p>Découvrez nos projets, nos services et notre expertise au quotidien.</p>
+    <!-- CANVASES FOR FUTURISTIC EFFECT -->
+    <canvas id="bg-canvas"></canvas>
+
+    <!-- HEADER / NAVIGATION -->
+    <header id="header">
+        <div class="nav-container">
+            <a href="#home" class="brand-logo">
+                <!-- Circuit trace stylized logo -->
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                <span>smofi<span class="highlight">-TECH</span></span>
+            </a>
+            
+            <nav>
+                <ul class="nav-menu" id="nav-menu">
+                    <li><a href="#home" class="nav-link active">Accueil</a></li>
+                    <li><a href="#services" class="nav-link">Services</a></li>
+                    <li><a href="#about" class="nav-link">À Propos</a></li>
+                    <li><a href="#why-us" class="nav-link">Expertise</a></li>
+                    <li><a href="#contact" class="nav-link">Contact</a></li>
+                </ul>
+            </nav>
+
+            <a href="#contact" class="cta-btn cta-header-btn">Démarrer un projet</a>
+
+            <button class="burger-menu" id="burger-menu" aria-label="Menu de navigation">
+                <i data-lucide="menu" id="burger-icon"></i>
+            </button>
+        </div>
     </header>
 
-    <div class="container">
-        <h2>À propos de nous</h2>
-        <p>Nous mettons nos compétences et notre passion au service de solutions innovantes et adaptées à vos besoins.</p>
-        
-        <h2>Nos Services</h2>
-        <p>Présentation claire et concise de ce que nous proposons à nos partenaires et clients.</p>
+    <!-- HERO SECTION -->
+    <section id="home" class="hero-section">
+        <div class="hero-grid">
+            <div class="hero-content">
+                <div class="badge">
+                    <span class="dot"></span> Innovation & Technologie
+                </div>
+                <h1 class="hero-title">
+                    <span class="gradient">L'excellence technologique</span> pour vos ambitions.
+                </h1>
+                <p class="hero-description">
+                    Smofi-Tech est un cabinet d'ingénierie et de conseil spécialisé en développement mobile (Flutter, Supabase) et en architecture logicielle. Porté par plus de 14 ans d'expertise technique, nous donnons vie à vos idées les plus complexes.
+                </p>
+                <div class="hero-buttons">
+                    <a href="#contact" class="cta-btn">Discutons de votre projet</a>
+                    <a href="#services" class="cta-btn-outline">Nos services</a>
+                </div>
+            </div>
+            
+            <div class="hero-visual">
+                <!-- Visual Showcase representing the logo image provided by user -->
+                <div class="visual-frame">
+                    <img src="./Gemini_Generated_Image_bn7wvebn7wvebn7w (1).jpg" alt="Smofi-Tech Logo et Design de circuit" width="600" height="338">
+                </div>
+            </div>
+        </div>
+    </section>
 
-        <a href="mailto:contact@votre-organisation.com" class="cta-button">Nous contacter</a>
+    <!-- SERVICES SECTION -->
+    <section id="services" class="section-pad reveal">
+        <div class="section-header">
+            <span class="section-tag">Notre savoir-faire</span>
+            <h2 class="section-title">Des solutions sur mesure</h2>
+            <p class="section-subtitle">Nous combinons rigueur d'ingénierie et technologies modernes pour concrétiser vos visions les plus complexes.</p>
+        </div>
+
+        <div class="services-grid">
+            <!-- Card 1 -->
+            <div class="service-card">
+                <div class="icon-box">
+                    <i data-lucide="smartphone"></i>
+                </div>
+                <h3 class="service-title">Développement Mobile Flutter & Supabase</h3>
+                <p class="service-desc">
+                    Conception et développement d'applications mobiles haut de gamme, performantes et fluides pour iOS et Android avec Flutter. Intégration de Supabase (Backend-as-a-Service) pour une gestion temps réel, sécurisée et évolutive de vos bases de données PostgreSQL, authentifications et fonctions serveurs.
+                </p>
+                <div class="service-tech-tags">
+                    <span class="tech-tag">Flutter / Dart</span>
+                    <span class="tech-tag">Supabase</span>
+                    <span class="tech-tag">iOS / Android</span>
+                    <span class="tech-tag">PostgreSQL / Realtime</span>
+                </div>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="service-card">
+                <div class="icon-box">
+                    <i data-lucide="cpu"></i>
+                </div>
+                <h3 class="service-title">Programmation Logicielle & Backends</h3>
+                <p class="service-desc">
+                    Développement d'architectures serveurs robustes et sécurisées. Conception d'APIs performantes et évolutives (REST, JAX-RS, SOAP), microservices basés sur Java/Spring ou TypeScript/Node.js, et développement d'algorithmes et de traitement de données complexes en Python.
+                </p>
+                <div class="service-tech-tags">
+                    <span class="tech-tag">Java / Spring Boot</span>
+                    <span class="tech-tag">TypeScript / Node.js</span>
+                    <span class="tech-tag">Python</span>
+                    <span class="tech-tag">APIs REST / SQL / Hibernate</span>
+                </div>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="service-card">
+                <div class="icon-box">
+                    <i data-lucide="shield-check"></i>
+                </div>
+                <h3 class="service-title">Consulting & Direction Technique (CTO)</h3>
+                <p class="service-desc">
+                    Conseil technologique stratégique (CTO as a Service) et audit de systèmes d'information, s'appuyant sur une solide expérience de Lead Tech auprès d'institutions d'envergure (Natixis, GE Money Bank, Sungard). Cadrage de projets complexes, revue de code, et méthodologie Agile SCRUM.
+                </p>
+                <div class="service-tech-tags">
+                    <span class="tech-tag">Audit d'Architecture</span>
+                    <span class="tech-tag">CTO as a Service</span>
+                    <span class="tech-tag">Agile SCRUM / Management</span>
+                    <span class="tech-tag">Revue de Code</span>
+                </div>
+            </div>
+
+            <!-- Card 4 -->
+            <div class="service-card">
+                <div class="icon-box">
+                    <i data-lucide="workflow"></i>
+                </div>
+                <h3 class="service-title">DevOps & Intégration Continue</h3>
+                <p class="service-desc">
+                    Mise en place de pipelines de déploiement continu automatisés (CI/CD) via Jenkins, GitLab ou GitHub Actions. Automatisation des environnements de développement, de recette et de production, et gestion de serveurs sous Linux (Ubuntu/CentOS).
+                </p>
+                <div class="service-tech-tags">
+                    <span class="tech-tag">Jenkins / Git</span>
+                    <span class="tech-tag">Linux (Ubuntu/CentOS)</span>
+                    <span class="tech-tag">Docker / DevOps</span>
+                    <span class="tech-tag">CI-CD / Cloud AWS</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ABOUT SECTION -->
+    <section id="about" class="section-pad reveal">
+        <div class="about-layout">
+            <div class="about-text">
+                <span class="section-tag">Qui sommes-nous ?</span>
+                <h3>Une expertise forgée sur la durée</h3>
+                <p>
+                    Fondée en <strong>2018</strong> à Paris par <strong>Mohamed El Hafi</strong> (Président, ingénieur diplômé bac+5 en 2012 et certifié Java/Spring Professional), <strong>Smofi-Tech</strong> capitalise sur plus de <strong>14 ans d'expertise</strong> en conception logicielle et en gestion d'équipes de développement.
+                </p>
+                <p>
+                    Notre parcours s'est enrichi au fil de missions clés en tant que Technical Lead et Consultant auprès d'acteurs de premier plan (Natixis, GE Money Bank, Sungard, Vermeg). Aujourd'hui, nous mettons ce savoir-faire de niveau entreprise au service de projets de toutes tailles, avec une spécialisation forte dans les écosystèmes mobiles modernes comme <strong>Flutter et Supabase</strong>.
+                </p>
+                
+                <div class="kbis-reference">
+                    <i data-lucide="info" style="display:inline-block; vertical-align:middle; margin-right:6px; width:18px; height:18px; color:var(--primary)"></i>
+                    <strong>Information légale :</strong> Smofi-Tech est enregistrée sous la forme d'une SAS à associé unique au RCS de Paris sous le numéro <strong>838 869 824</strong>. Une stabilité et un professionnalisme démontrés depuis plus de 8 ans.
+                </div>
+            </div>
+
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-value" data-target="14">0</div>
+                    <div class="metric-label">Années d'expérience</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value" data-target="50">0</div>
+                    <div class="metric-label">Projets livrés</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value" data-target="3">0</div>
+                    <div class="metric-label">Certifications Techniques</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value" data-target="100">0</div>
+                    <div class="metric-label">% Satisfaction client</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- WHY US SECTION -->
+    <section id="why-us" class="section-pad reveal">
+        <div class="section-header">
+            <span class="section-tag">Pourquoi nous choisir</span>
+            <h2 class="section-title">L'avantage Smofi-Tech</h2>
+            <p class="section-subtitle">Notre approche garantit la réussite de vos projets, de l'idée initiale à la mise en production.</p>
+        </div>
+
+        <div class="why-us-grid">
+            <div class="why-us-card">
+                <div class="icon-wrap">
+                    <i data-lucide="activity"></i>
+                </div>
+                <h3>Performance Optimale</h3>
+                <p>Chaque ligne de code est pensée pour la rapidité d'exécution, la sobriété des ressources et la fluidité de l'expérience utilisateur.</p>
+            </div>
+            
+            <div class="why-us-card">
+                <div class="icon-wrap">
+                    <i data-lucide="layers"></i>
+                </div>
+                <h3>Conception Évolutive</h3>
+                <p>Nous construisons des architectures modulaires qui s'adaptent facilement aux futurs besoins et fonctionnalités de votre entreprise.</p>
+            </div>
+
+            <div class="why-us-card">
+                <div class="icon-wrap">
+                    <i data-lucide="messages-square"></i>
+                </div>
+                <h3>Transparence & Agilité</h3>
+                <p>Un suivi de projet rigoureux, une communication directe et des livraisons régulières pour avancer ensemble sereinement.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTACT SECTION -->
+    <section id="contact" class="section-pad reveal">
+        <div class="section-header">
+            <span class="section-tag">Contact</span>
+            <h2 class="section-title">Démarrons une collaboration</h2>
+            <p class="section-subtitle">Une question ? Un projet à développer ? Remplissez le formulaire ou contactez-nous directement.</p>
+        </div>
+
+        <div class="contact-layout">
+            <div class="contact-info">
+                <div class="info-card">
+                    <h3>Coordonnées</h3>
+                    
+                    <div class="info-item">
+                        <i data-lucide="mail" class="info-icon"></i>
+                        <div class="info-text">
+                            <h4>E-mail</h4>
+                            <p><a href="mailto:smofi.tech@gmail.com">smofi.tech@gmail.com</a></p>
+                        </div>
+                    </div>
+
+                    <div class="info-item">
+                        <i data-lucide="map-pin" class="info-icon"></i>
+                        <div class="info-text">
+                            <h4>Adresse du Siège</h4>
+                            <p>14 rue Bausset, 75015 Paris</p>
+                        </div>
+                    </div>
+
+                    <div class="info-item">
+                        <i data-lucide="clock" class="info-icon"></i>
+                        <div class="info-text">
+                            <h4>Disponibilité</h4>
+                            <p>Du Lundi au Vendredi<br>De 9h00 à 18h00</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="contact-form-container">
+                <form class="contact-form" id="contact-form">
+                    <div class="form-group">
+                        <label for="name" class="form-label">Votre nom</label>
+                        <input type="text" id="name" name="name" class="form-input" placeholder="Ex. Jean Dupont" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email" class="form-label">Votre adresse e-mail</label>
+                        <input type="email" id="email" name="email" class="form-input" placeholder="Ex. jean.dupont@exemple.com" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="subject" class="form-label">Sujet de votre message</label>
+                        <input type="text" id="subject" name="subject" class="form-input" placeholder="Ex. Création d'application mobile" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="message" class="form-label">Votre message</label>
+                        <textarea id="message" name="message" class="form-input" placeholder="Décrivez brièvement votre projet ou votre besoin..." required></textarea>
+                    </div>
+
+                    <button type="submit" class="cta-btn" id="submit-btn" style="width:100%; display:block; text-align:center;">
+                        <span class="btn-text">Envoyer le message</span>
+                        <div class="btn-loading-content" id="btn-loading">
+                            <div class="spinner"></div>
+                            <span>Envoi en cours...</span>
+                        </div>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-container">
+            <div class="brand-logo footer-logo">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                <span>smofi<span class="highlight">-TECH</span></span>
+            </div>
+            
+            <ul class="footer-links">
+                <li><a href="#home" class="footer-link">Accueil</a></li>
+                <li><a href="#services" class="footer-link">Services</a></li>
+                <li><a href="#about" class="footer-link">À Propos</a></li>
+                <li><a href="#" class="footer-link" id="legal-trigger">Mentions Légales</a></li>
+            </ul>
+
+            <div>
+                <p class="copyright">Copyright &copy; 2026 SMOFI-TECH. Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- TOAST NOTIFICATION -->
+    <div class="toast" id="toast">
+        <i data-lucide="check-circle" class="toast-icon"></i>
+        <span class="toast-message" id="toast-message">Message envoyé avec succès !</span>
     </div>
 
+    <!-- LEGAL MENTIONS MODAL -->
+    <div class="modal" id="legal-modal">
+        <div class="modal-content">
+            <button class="modal-close" id="modal-close" aria-label="Fermer la fenêtre">
+                <i data-lucide="x"></i>
+            </button>
+            <h2 class="modal-title">Mentions Légales</h2>
+            <div class="modal-body">
+                <div>
+                    <h3 class="modal-section-title">1. Présentation de la société</h3>
+                    <p>
+                        En vertu de l'article 6 de la loi n° 2004-575 du 21 juin 2004 pour la confiance dans l'économie numérique, il est précisé aux utilisateurs du site l'identité des différents intervenants dans le cadre de sa réalisation et de son suivi :
+                    </p>
+                    <p style="margin-top: 8px;">
+                        <strong>Propriétaire :</strong> SMOFI-TECH, Société par actions simplifiée (Société à associé unique) au capital social de 500,00 EUROS.<br>
+                        <strong>Siège social :</strong> 14 rue Bausset, 75015 Paris, France.<br>
+                        <strong>Immatriculation :</strong> Enregistrée au RCS de Paris sous le numéro SIREN 838 869 824.<br>
+                        <strong>Président :</strong> Mohamed El Hafi.<br>
+                        <strong>Contact :</strong> <a href="mailto:smofi.tech@gmail.com" style="color: var(--primary);">smofi.tech@gmail.com</a>.
+                    </p>
+                </div>
+                <div>
+                    <h3 class="modal-section-title">2. Propriété intellectuelle</h3>
+                    <p>
+                        SMOFI-TECH est propriétaire des droits de propriété intellectuelle ou détient les droits d'usage sur tous les éléments accessibles sur le site, notamment les textes, images, graphismes, logos, icônes, sons et logiciels.
+                    </p>
+                    <p style="margin-top: 8px;">
+                        Toute reproduction, représentation, modification, publication, adaptation de tout ou partie des éléments du site, quel que soit le moyen ou le procédé utilisé, est interdite, sauf autorisation écrite préalable de SMOFI-TECH.
+                    </p>
+                </div>
+                <div>
+                    <h3 class="modal-section-title">3. Hébergement</h3>
+                    <p>
+                        Le site est hébergé de manière sécurisée par un prestataire d'hébergement européen respectant le Règlement Général sur la Protection des Données (RGPD).
+                    </p>
+                </div>
+                <div>
+                    <h3 class="modal-section-title">4. Limitation de responsabilité</h3>
+                    <p>
+                        SMOFI-TECH ne pourra être tenu responsable des dommages directs et indirects causés au matériel de l'utilisateur, lors de l'accès au site, et résultant soit de l'utilisation d'un matériel ne répondant pas aux spécifications indiquées, soit de l'apparition d'un bug ou d'une incompatibilité.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT CODE -->
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        /* --- HEADER SCROLL EFFECT --- */
+        const header = document.getElementById('header');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        /* --- MOBILE BURGER MENU --- */
+        const burgerMenu = document.getElementById('burger-menu');
+        const burgerIcon = document.getElementById('burger-icon');
+        const navMenu = document.getElementById('nav-menu');
+
+        burgerMenu.addEventListener('click', () => {
+            navMenu.classList.toggle('open');
+            const isOpen = navMenu.classList.contains('open');
+            if (isOpen) {
+                burgerIcon.setAttribute('data-lucide', 'x');
+            } else {
+                burgerIcon.setAttribute('data-lucide', 'menu');
+            }
+            lucide.createIcons();
+        });
+
+        // Close menu when a link is clicked
+        const navLinks = document.querySelectorAll('.nav-link');
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                navMenu.classList.remove('open');
+                burgerIcon.setAttribute('data-lucide', 'menu');
+                lucide.createIcons();
+            });
+        });
+
+        /* --- ACTIVE NAVIGATION LINKS ON SCROLL --- */
+        const sections = document.querySelectorAll('section');
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (window.scrollY >= (sectionTop - 150)) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').includes(current)) {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        /* --- BACKGROUND CANVAS ANIMATION --- */
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+
+        let particles = [];
+        const maxParticles = 65;
+
+        // Resize Canvas
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 1;
+                // Move in grid-like angles (0, 90, 180, 270 degrees) to simulate circuit traces
+                const speedFactor = 0.3;
+                const directions = [
+                    {x: speedFactor, y: 0},
+                    {x: -speedFactor, y: 0},
+                    {x: 0, y: speedFactor},
+                    {x: 0, y: -speedFactor}
+                ];
+                const dir = directions[Math.floor(Math.random() * directions.length)];
+                this.vx = dir.x;
+                this.vy = dir.y;
+                this.color = Math.random() > 0.4 ? '#06b6d4' : '#3b82f6';
+                this.steps = Math.random() * 200 + 100; // time before changing direction
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+
+                // Border checks
+                if (this.x < 0) this.x = canvas.width;
+                if (this.x > canvas.width) this.x = 0;
+                if (this.y < 0) this.y = canvas.height;
+                if (this.y > canvas.height) this.y = 0;
+
+                // Randomly change direction at right angles occasionally
+                this.steps--;
+                if (this.steps <= 0) {
+                    const speedFactor = 0.3;
+                    if (this.vx !== 0) {
+                        this.vx = 0;
+                        this.vy = Math.random() > 0.5 ? speedFactor : -speedFactor;
+                    } else {
+                        this.vy = 0;
+                        this.vx = Math.random() > 0.5 ? speedFactor : -speedFactor;
+                    }
+                    this.steps = Math.random() * 200 + 100;
+                }
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.shadowBlur = 8;
+                ctx.shadowColor = this.color;
+                ctx.fill();
+                ctx.shadowBlur = 0; // reset
+            }
+        }
+
+        // Initialize particles
+        function initParticles() {
+            particles = [];
+            for (let i = 0; i < maxParticles; i++) {
+                particles.push(new Particle());
+            }
+        }
+        initParticles();
+
+        // Connect particles with thin lines mimicking electrical PCB connections
+        function drawConnections() {
+            ctx.shadowBlur = 0;
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+
+                    // Connect if close enough
+                    if (distance < 140) {
+                        // Drawing L-shaped connections (Manhattan routing) for circuit layout
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        
+                        // L-shape routing
+                        if (Math.abs(dx) > Math.abs(dy)) {
+                            ctx.lineTo(particles[j].x, particles[i].y);
+                        } else {
+                            ctx.lineTo(particles[i].x, particles[j].y);
+                        }
+                        
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        
+                        // Opacity based on distance
+                        const alpha = (1 - (distance / 140)) * 0.12;
+                        ctx.strokeStyle = `rgba(6, 182, 212, ${alpha})`;
+                        ctx.lineWidth = 0.7;
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+
+        // Animation Loop
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw background grid lines (very subtle)
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.015)';
+            ctx.lineWidth = 1;
+            const gridSize = 80;
+            for (let x = 0; x < canvas.width; x += gridSize) {
+                ctx.beginPath();
+                ctx.moveTo(x, 0);
+                ctx.lineTo(x, canvas.height);
+                ctx.stroke();
+            }
+            for (let y = 0; y < canvas.height; y += gridSize) {
+                ctx.beginPath();
+                ctx.moveTo(0, y);
+                ctx.lineTo(canvas.width, y);
+                ctx.stroke();
+            }
+
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            drawConnections();
+            requestAnimationFrame(animate);
+        }
+        animate();
+
+        /* --- REVEAL ELEMENTS ON SCROLL --- */
+        const revealElements = document.querySelectorAll('.reveal');
+        
+        const revealOnScroll = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    // If target is the about section, trigger numbers animation
+                    if (entry.target.id === 'about') {
+                        animateNumbers();
+                    }
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, {
+            threshold: 0.15
+        });
+
+        revealElements.forEach(el => {
+            revealOnScroll.observe(el);
+        });
+
+        /* --- ANIMATED NUMBERS COUNTER --- */
+        let animated = false;
+        function animateNumbers() {
+            if (animated) return;
+            animated = true;
+            
+            const values = document.querySelectorAll('.metric-value');
+            values.forEach(val => {
+                const target = parseInt(val.getAttribute('data-target'), 10);
+                let current = 0;
+                const duration = 2000; // 2s
+                const stepTime = Math.max(Math.floor(duration / target), 15);
+                
+                const timer = setInterval(() => {
+                    current += Math.ceil(target / (duration / stepTime));
+                    if (current >= target) {
+                        val.innerText = target + (target === 100 ? '%' : '+');
+                        clearInterval(timer);
+                    } else {
+                        val.innerText = current + '+';
+                    }
+                }, stepTime);
+            });
+        }
+
+        /* --- CONTACT FORM INTERACTION (SIMULATED SUBMIT) --- */
+        const contactForm = document.getElementById('contact-form');
+        const submitBtn = document.getElementById('submit-btn');
+        const btnText = submitBtn.querySelector('.btn-text');
+        const btnLoading = document.getElementById('btn-loading');
+        const toast = document.getElementById('toast');
+        const toastMessage = document.getElementById('toast-message');
+
+        contactForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            // Validate inputs
+            const name = document.getElementById('name').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const subject = document.getElementById('subject').value.trim();
+            const message = document.getElementById('message').value.trim();
+
+            if (!name || !email || !subject || !message) {
+                showToast("Veuillez remplir tous les champs obligatoires.", "error");
+                return;
+            }
+
+            // Disable submit button & show loading spinner
+            submitBtn.disabled = true;
+            btnText.style.display = 'none';
+            btnLoading.style.display = 'flex';
+
+            // Simulate server network delay
+            setTimeout(() => {
+                // Success actions
+                showToast("Votre message a bien été envoyé ! Nous vous répondrons sous 24h.");
+                contactForm.reset();
+                
+                // Restore button
+                submitBtn.disabled = false;
+                btnText.style.display = 'inline-block';
+                btnLoading.style.display = 'none';
+            }, 1800);
+        });
+
+        function showToast(msg, type = "success") {
+            toastMessage.innerText = msg;
+            
+            const toastIcon = toast.querySelector('.toast-icon');
+            if (type === "success") {
+                toast.style.borderLeftColor = 'var(--primary)';
+                toastIcon.setAttribute('data-lucide', 'check-circle');
+                toastIcon.style.color = 'var(--primary)';
+            } else {
+                toast.style.borderLeftColor = '#ef4444'; // Red
+                toastIcon.setAttribute('data-lucide', 'alert-triangle');
+                toastIcon.style.color = '#ef4444';
+            }
+            lucide.createIcons();
+
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 4500);
+        }
+
+        /* --- LEGAL MENTIONS MODAL CONTROL --- */
+        const legalTrigger = document.getElementById('legal-trigger');
+        const legalModal = document.getElementById('legal-modal');
+        const modalClose = document.getElementById('modal-close');
+
+        legalTrigger.addEventListener('click', (e) => {
+            e.preventDefault();
+            legalModal.classList.add('open');
+            document.body.style.overflow = 'hidden'; // block scroll
+        });
+
+        function closeModal() {
+            legalModal.classList.remove('open');
+            document.body.style.overflow = ''; // restore scroll
+        }
+
+        modalClose.addEventListener('click', closeModal);
+        legalModal.addEventListener('click', (e) => {
+            if (e.target === legalModal) {
+                closeModal();
+            }
+        });
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && legalModal.classList.contains('open')) {
+                closeModal();
+            }
+        });
+    </script>
 </body>
 </html>
